@@ -25,7 +25,12 @@
             const url = 'https://demo.asiakastieto.fi/services/company5/REST?businessid=01110279&version=5.01&qtype=1&request=false&userid=myuserid&passwd=mypassword&enduser=testuser&lang=EN&reqmsg=COMPANY&target=VAP1&format=json&timestamp=2024052107063028%2B0000000&checksum=TESTCHECKSUMSUMFORSWAGGERTHATISNOTVALID917CFC8D23F75864C1852B65D263957C88D620C53DDBB4C10F6EB0630FBD1F8AA863FA103A2DB88146DED4967';
             
             fetch(url)
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok: ' + response.statusText);
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     document.getElementById('response').textContent = JSON.stringify(data, null, 2);
                 })
