@@ -3,26 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Static Web App</title>
+    <title>API Call Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #response {
+            margin-top: 20px;
+            white-space: pre-wrap; /* Preserves formatting of JSON */
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to My Static Web App</h1>
-    <button id="callFunctionButton">Call Azure Function</button>
-    <div id="resultDisplay"></div>
+    <h1>API Call Example</h1>
+    <button id="apiCallButton">Make API Call</button>
+    <div id="response"></div>
 
     <script>
-        document.getElementById('callFunctionButton').addEventListener('click', async () => {
-            try {
-                const response = await fetch('https://<your-function-app-name>.azurewebsites.net/api/<your-function-name>');
-                const data = await response.json();
-
-                // Display the result in the resultDisplay div
-                document.getElementById('resultDisplay').innerText = data.message; // Adjust based on your response structure
-            } catch (error) {
-                console.error('Error calling the function:', error);
-                document.getElementById('resultDisplay').innerText = 'Error calling the function!';
-            }
+        document.getElementById('apiCallButton').addEventListener('click', function() {
+            const url = 'https://demo.asiakastieto.fi/services/company5/REST?businessid=01110279&version=5.01&qtype=1&request=false&userid=myuserid&passwd=mypassword&enduser=testuser&lang=EN&reqmsg=COMPANY&target=VAP1&format=json&timestamp=2024052107063028%2B0000000&checksum=TESTCHECKSUMSUMFORSWAGGERTHATISNOTVALID917CFC8D23F75864C1852B65D263957C88D620C53DDBB4C10F6EB0630FBD1F8AA863FA103A2DB88146DED4967';
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('response').textContent = JSON.stringify(data, null, 2);
+                })
+                .catch(error => {
+                    document.getElementById('response').textContent = 'Error: ' + error;
+                });
         });
     </script>
 </body>
-</html> 
+</html>
