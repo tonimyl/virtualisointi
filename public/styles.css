@@ -7,7 +7,7 @@ body {
     line-height: 1.6;
 }
 
-/* Header */
+
 header {
     background-color: #007BFF;
     color: #fff;
@@ -18,7 +18,7 @@ header {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Container (Section for Inputs and Outputs) */
+
 section {
     max-width: 1200px;
     margin: 2rem auto;
@@ -29,7 +29,7 @@ section {
     overflow: hidden;
 }
 
-/* Input Section */
+
 .input-section {
     display: flex;
     flex-direction: column;
@@ -45,8 +45,8 @@ section {
 
 .input-section .input-row {
     display: flex;
-    flex-wrap: wrap;  /* Allows the input fields and buttons to wrap on smaller screens */
-    gap: 10px;  /* Adds space between the input and button */
+    flex-wrap: wrap;  
+    gap: 10px;  
     margin-bottom: 1rem;
 }
 
@@ -65,17 +65,17 @@ section {
     outline: none;
 }
 .scrollable-list {
-    max-height: 200px; /* Set the maximum height */
-    overflow-y: auto; /* Add vertical scrolling when content exceeds max-height */
-    border: 1px solid #ccc; /* Optional: Add a border for better visibility */
-    padding: 8px; /* Add padding inside the container */
-    background-color: #f9f9f9; /* Optional: Light background for readability */
-    font-family: 'Roboto', sans-serif; /* Match the font style */
-    font-size: 14px; /* Optional: Adjust font size for better display */
-    line-height: 1.5; /* Optional: Improve readability with line spacing */
+    max-height: 200px; 
+    overflow-y: auto; 
+    border: 1px solid #ccc;
+    padding: 8px; 
+    background-color: #f9f9f9; 
+    font-family: 'Roboto', sans-serif; 
+    font-size: 14px; 
+    line-height: 1.5; 
 }
 button {
-    background-color: #4CAF50; /* Green background */
+    background-color: #4CAF50; 
     color: white;
     border: none;
     padding: 10px 20px;
@@ -89,7 +89,7 @@ button {
 }
 
 button:hover {
-    background-color: #45a049; /* Slightly darker green on hover */
+    background-color: #45a049; 
 }
 
 button:disabled {
@@ -97,7 +97,7 @@ button:disabled {
     cursor: not-allowed;
 }
 
-/* Output Section */
+
 .output-section {
     padding: 2rem;
     background: #f9f9f9;
@@ -116,11 +116,11 @@ button:disabled {
     border-radius: 4px;
     font-family: monospace;
     font-size: 0.9rem;
-    white-space: pre-line; /* Wrap text without adding extra spaces/indentation */
+    white-space: pre-line; 
     word-wrap: break-word;
     overflow: auto;
     color: #333;
-    margin: 0; /* Remove any extra margin */
+    margin: 0; 
 }
 
 table {
@@ -143,13 +143,13 @@ td {
     background-color: #fff;
 }
 
-/* Media Queries for Responsiveness */
+
 @media (max-width: 768px) {
     .input-section .input-row {
-        flex-direction: column;  /* Stacks inputs and buttons on small screens */
+        flex-direction: column;  
     }
     .input-section input,
     .input-section button {
-        width: 100%; /* Full width for inputs and buttons */
+        width: 100%; 
     }
 }
