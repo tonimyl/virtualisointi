@@ -10,24 +10,35 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Fetch Data</h1>
+    <header class="main-header">
+        <h1>Business Info Fetcher</h1>
+    </header>
 
-    <!-- Input field for the user to provide the businessId -->
-    <label for="businessId">Enter Business ID: </label>
-    <input type="text" id="businessId" name="businessId" />
+    <!-- Input Section -->
+    <section class="input-section">
+        <!-- Input for Business ID -->
+        <label for="businessId" class="input-label">Enter Business ID:</label>
+        <input type="text" id="businessId" name="businessId" placeholder="e.g., 1234567-8" />
 
-    <!-- Button that triggers fetchData function -->
-    <button onclick="fetchData()">Fetch Data</button><br>
+        <!-- Fetch Button -->
+        <button onclick="fetchData()">Fetch Data</button><br>
 
-    <label for="companyname">Search company by name: </label>
-    <input type="text" id="companyname" name="companyname" />
-    <button onclick="fetchCompanyName()">Fetch Data</button><br>
+        <!-- Input for Company Name -->
+        <label for="companyname" class="input-label">Search company by name:</label>
+        <input type="text" id="companyname" name="companyname" placeholder="e.g., Example Ltd." />
 
-    <h2>Fetched Comapany ID's:</h2>
-    <pre id="companyNames">Loading...</pre>
-    <h2>Fetched Data:</h2>
-    <pre id="json-data">Loading...</pre>
+        <!-- Fetch Button -->
+        <button onclick="fetchCompanyName()">Fetch Data</button>
+    </section>
 
+    <!-- Output Section -->
+    <section class="output-section">
+        <h2>Fetched Company IDs:</h2>
+        <pre id="companyNames">Loading...</pre>
+
+        <h2>Fetched Data:</h2>
+        <pre id="json-data">Loading...</pre>
+    </section>
     <script>
     
     async function fetchData() {
