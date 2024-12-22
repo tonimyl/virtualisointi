@@ -25,55 +25,54 @@
     <pre id="json-data">Loading...</pre>
 
     <script>
-        async function fetchData() {
-        // Get the businessId from the input field
-        const businessId = document.getElementById('businessId').value;
+    
+    async function fetchData() {
+    const businessId = document.getElementById('businessId').value;
 
-        // Make sure the businessId is not empty
-        if (!businessId) {
-            document.getElementById('json-data').textContent = "Please enter a valid Business ID.";
-            return;
+    if (!businessId) {
+        document.getElementById('json-data').textContent = "Please enter a valid Business ID.";
+        return;
+    }
+
+    try {
+        const url = `https://yrityshaku.azurewebsites.net/api/fetchdata?businessId=${encodeURIComponent(businessId)}`;
+        console.log(`Fetching data from: ${url}`); // Log the URL
+
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        try {
-            // Construct the URL with the businessId as a query parameter
-            const url = `https://yrityshaku.azurewebsites.net/api/fetchdata?businessId=${encodeURIComponent(businessId)}`;
+        const data = await response.json();
+        console.log("Response data:", data); // Log the response
 
-            // Make the fetch request
-            const response = await fetch(url);
-            const data = await response.json();
+        const {
+            identificationData: {
+                name,
+                businessId,
+                address: { street, zip, town } = {},
+                contactInformation: { phone, www, email } = {},
+                lineOfBusiness: { lineOfBusinessText } = {}
+            } = {}
+        } = data.companyResponse || {};
 
-            // Extract the desired fields
-            const {
-                identificationData: {
-                    name,
-                    businessId,
-                    address: { street, zip, town } = {},
-                    contactInformation: { phone, www, email } = {},
-                    lineOfBusiness: { lineOfBusinessText } = {}
-                } = {}
-            } = data.companyResponse || {};
+        const output = `
+            Name: ${name || "N/A"}
+            Business ID: ${businessId || "N/A"}
+            Address: ${street || "N/A"}, ${zip || "N/A"} ${town || "N/A"}
+            Phone: ${phone || "N/A"}
+            Website: ${www || "N/A"}
+            Email: ${email || "N/A"}
+            Line of Business: ${lineOfBusinessText || "N/A"}
+        `;
 
-            // Create a clean output
-            const output = `
-                Name: ${name || "N/A"}
-                Business ID: ${businessId || "N/A"}
-                Address: ${street || "N/A"}, ${zip || "N/A"} ${town || "N/A"}
-                Phone: ${phone || "N/A"}
-                Website: ${www || "N/A"}
-                Email: ${email || "N/A"}
-                Line of Business: ${lineOfBusinessText || "N/A"}
-            `;
-
-            // Display the output in the HTML element
-            document.getElementById('json-data').textContent = output.trim();
-        } 
-        catch (error) {
-            // Handle any errors that occur
-            document.getElementById('json-data').textContent = 'Error fetching data.';
-            console.error(error);
-        }
-}   
+        document.getElementById('json-data').textContent = output.trim();
+    } catch (error) {
+        document.getElementById('json-data').textContent = 'Error fetching data.';
+        console.error("Error details:", error);
+    }
+}
     
     async function fetchCompanyName() {
     // Get the company name from the input field
