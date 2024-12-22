@@ -64,12 +64,12 @@ section {
     background-color: #007BFF;
     color: #fff;
     border: none;
-    padding: 0.8rem 1.5rem;
-    font-size: 1rem;
+    padding: 0.5rem 1rem; /* Smaller padding */
+    font-size: 0.9rem; /* Smaller font size */
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin-bottom: 1rem;
+    margin-top: 10px;
 }
 
 .input-section button:hover {

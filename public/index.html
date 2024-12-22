@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Business Info Fetcher</title>
-    <!-- Link to Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- Link to the external CSS file -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -14,24 +12,14 @@
         <h1>Business Info Fetcher</h1>
     </header>
 
-    <!-- Input Section -->
     <section class="input-section">
-        <!-- Input for Business ID -->
         <label for="businessId" class="input-label">Enter Business ID:</label>
         <input type="text" id="businessId" name="businessId" placeholder="e.g., 1234567-8" />
-
-        <!-- Fetch Button -->
         <button onclick="fetchData()">Fetch Data</button><br>
-
-        <!-- Input for Company Name -->
         <label for="companyname" class="input-label">Search company by name:</label>
         <input type="text" id="companyname" name="companyname" placeholder="e.g., Example Ltd." />
-
-        <!-- Fetch Button -->
         <button onclick="fetchCompanyName()">Fetch Data</button>
     </section>
-
-    <!-- Output Section -->
     <section class="output-section">
         <h2>Fetched Company IDs:</h2>
         <pre id="companyNames"></pre>
@@ -62,7 +50,7 @@
         const data = await response.json();
         console.log("Response data:", data);
         const cleanOutput = (text) => {
-            return text.trim().replace(/^ +/gm, ''); // Removes leading spaces for each line
+            return text.trim().replace(/^ +/gm, ''); 
                 };
         const {
             identificationData: {
@@ -92,34 +80,27 @@ Line of Business: ${lineOfBusinessText || "N/A"}
 }
     
     async function fetchCompanyName() {
-    // Get the company name from the input field
         const companyName = document.getElementById('companyname').value;
         
-        // Ensure the company name is not empty
         if (!companyName) {
             document.getElementById('companyNames').textContent = "Please enter a valid company name";
             return;
         }
     
         try {
-            // Construct the URL with the company name as a query parameter
             const url = `https://yrityshaku.azurewebsites.net/api/companyname?name=${encodeURIComponent(companyName)}`;
         
-            // Make the fetch request
             const response = await fetch(url);
             const data = await response.json();
         
-            // Extract the list of companies
             const companies = data.companies.map(company => {
                 const businessId = company.businessId.value;
                 const name = company.names[0]?.name || "Unknown Name";
                 return `${name}, ${businessId}`;
             });
         
-            // Join the list with line breaks and display it in the HTML
             document.getElementById('companyNames').textContent = companies.join('\n');
         } catch (error) {
-            // Handle any errors that occur
             document.getElementById('companyNames').textContent = 'Error fetching data.';
         }
 }
