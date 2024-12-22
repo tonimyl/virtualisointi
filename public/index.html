@@ -100,7 +100,7 @@
             const companies = data.companies.map(company => {
                 const businessId = company.businessId.value;
                 const name = company.names[0]?.name || "Unknown Name";
-                return `Company name: ${name}, Business ID: ${businessId}`;
+                return `${name}, ${businessId}`;
             });
         
             // Join the list with line breaks and display it in the HTML
