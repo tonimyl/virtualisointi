@@ -75,14 +75,14 @@
         } = data.companyResponse || {};
 
         const output = `
-        Name: ${name || "N/A"}
-        Business ID: ${businessId || "N/A"}
-        Address: ${street || "N/A"}, ${zip || "N/A"} ${town || "N/A"}
-        Phone: ${phone || "N/A"}
-        Website: ${www || "N/A"}
-        Email: ${email || "N/A"}
-        Line of Business: ${lineOfBusinessText || "N/A"}
-        `;
+Name: ${name || "N/A"}
+Business ID: ${businessId || "N/A"}
+Address: ${street || "N/A"}, ${zip || "N/A"} ${town || "N/A"}
+Phone: ${phone || "N/A"}
+Website: ${www || "N/A"}
+Email: ${email || "N/A"}
+Line of Business: ${lineOfBusinessText || "N/A"}
+`;
 
         document.getElementById('json-data').textContent = cleanOutput(output);
     } catch (error) {
