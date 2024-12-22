@@ -1,18 +1,18 @@
 const sql = require('mssql');
 
-// Database connection configuration
+// Your Azure SQL database config
 const config = {
     user: "sqladmin",        // Database username 
-    password: "HK12asd442",    // Database password
-    server: "virtualisointisql.database.windows.net",     // Your SQL Server name or Azure SQL server URL
-    database: "virtualisointidb",     // Your database name
+    password: "HK12asd442",    // Database password 
+    server: "virtualisointisql.database.windows.net",  // Your Azure SQL Server URL
+    database: "virtualisointidb",  // Your database name
     options: {
-        encrypt: true, // For Azure SQL, set this to true
-        trustServerCertificate: true // Set to true for Azure SQL if SSL is required
+        encrypt: true,  // Required for Azure SQL
+        trustServerCertificate: true  // Required for Azure SQL with SSL
     }
 };
 
-// Insert company data into the database
+// Insert company data into the database (for POST requests)
 async function insertCompanyData(data) {
     try {
         // Create a connection pool
@@ -38,19 +38,49 @@ async function insertCompanyData(data) {
     }
 }
 
-// Azure Function to handle HTTP requests
+// Retrieve all company data (for GET requests)
+async function getAllCompanies() {
+    try {
+        // Create a connection pool
+        let pool = await sql.connect(config);
+
+        // SQL query to get all companies
+        let query = `
+            SELECT * FROM CompanyData
+        `;
+
+        // Execute the query
+        const result = await pool.request().query(query);
+
+        // Return the result
+        return result.recordset;  // This will return an array of company records
+
+    } catch (err) {
+        console.error(err);
+        return { message: 'Error retrieving company data', error: err.message };
+    }
+}
+
+// Azure Function entry point
 module.exports = async function (context, req) {
     if (req.method === 'POST') {
-        // Call the function to insert data into the database
+        // Insert new data into the database
         const result = await insertCompanyData(req.body);
         context.res = {
-            status: 200, /* Defaults to 200 */
+            status: 200,  // Success
+            body: result
+        };
+    } else if (req.method === 'GET') {
+        // Retrieve all companies
+        const result = await getAllCompanies();  // Fetch all company data
+        context.res = {
+            status: 200,  // Success
             body: result
         };
     } else {
         context.res = {
-            status: 405, // Method Not Allowed
-            body: "Method not allowed. Use POST."
+            status: 405,  // Method Not Allowed
+            body: "Method not allowed. Use GET or POST."
         };
     }
 };
