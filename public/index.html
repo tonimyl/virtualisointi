@@ -38,19 +38,14 @@
         <!-- Save Button -->
         <button id="saveDataButton" onclick="saveData()" disabled>Save</button>
 
-        <label for="companyFilter" class="input-label">Filter Companies by Name:</label>
-        <div class="input-row">
-            <input type="text" id="companyFilter" name="companyFilter" placeholder="e.g., Example" />
-            <button onclick="fetchCompanies()">Hae Companies</button>
-        </div>
-
         <h2>List of Companies:</h2>
-        <pre id="companyList"></pre>
+        <pre id="companyList">Loading...</pre>
     </section>
 
     <script>
         let fetchedData = null; // Store the fetched data
 
+        // Fetch company data based on Business ID
         async function fetchData() {
             const businessId = document.getElementById('businessId').value;
 
@@ -118,6 +113,7 @@ Line of Business: ${lineOfBusinessText || "N/A"}
             }
         }
 
+        // Save data to the database
         async function saveData() {
             if (!fetchedData) {
                 alert("No data to save!");
@@ -145,6 +141,7 @@ Line of Business: ${lineOfBusinessText || "N/A"}
             }
         }
 
+        // Fetch companies by name
         async function fetchCompanyName() {
             const companyName = document.getElementById('companyname').value;
             
@@ -170,42 +167,47 @@ Line of Business: ${lineOfBusinessText || "N/A"}
                 document.getElementById('companyNames').textContent = 'Error fetching data.';
             }
         }
+
+        // Fetch all companies and display them
         async function fetchCompanies() {
-        try {
-            const url = `https://yrityshaku.azurewebsites.net/api/dboperations?`; 
-            const response = await fetch(url);
+            try {
+                const url = `https://yrityshaku.azurewebsites.net/api/dboperations?`; 
+                const response = await fetch(url);
 
-        // Ensure we received a valid response
-        if (!response.ok) {
-            throw new Error(`Error fetching companies: ${response.statusText}`);
+                // Ensure we received a valid response
+                if (!response.ok) {
+                    throw new Error(`Error fetching companies: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+
+                // Check if the data is an array (it should be)
+                if (Array.isArray(data)) {
+                    // Display all companies' information
+                    const companyList = data.map(company => {
+                        return `
+                            Name: ${company.name || 'N/A'}
+                            Business ID: ${company.businessId || 'N/A'}
+                            Address: ${company.street || 'N/A'}, ${company.zip || 'N/A'}, ${company.town || 'N/A'}
+                            Phone: ${company.phone || 'N/A'}
+                            Website: ${company.website || 'N/A'}
+                            Email: ${company.email || 'N/A'}
+                            Line of Business: ${company.lineOfBusiness || 'N/A'}
+                        `;
+                    }).join('\n\n');
+
+                    document.getElementById('companyList').textContent = companyList;
+                } else {
+                    throw new Error('The response is not an array. Please check the backend API.');
+                }
+            } catch (error) {
+                console.error("Error fetching companies:", error);
+                document.getElementById('companyList').textContent = 'Error fetching companies.';
+            }
         }
 
-        const data = await response.json();
-
-        // Check if the data is an array (it should be)
-        if (Array.isArray(data)) {
-            // Display all companies' information
-            const companyList = data.map(company => {
-                return `
-                    Name: ${company.name || 'N/A'}
-                    Business ID: ${company.businessId || 'N/A'}
-                    Address: ${company.street || 'N/A'}, ${company.zip || 'N/A'}, ${company.town || 'N/A'}
-                    Phone: ${company.phone || 'N/A'}
-                    Website: ${company.website || 'N/A'}
-                    Email: ${company.email || 'N/A'}
-                    Line of Business: ${company.lineOfBusiness || 'N/A'}
-                `;
-            }).join('\n\n');
-
-            document.getElementById('companyList').textContent = companyList;
-        } else {
-            throw new Error('The response is not an array. Please check the backend API.');
-        }
-    } catch (error) {
-        console.error("Error fetching companies:", error);
-        document.getElementById('companyList').textContent = 'Error fetching companies.';
-    }
-}
+        // Automatically fetch all companies when the page loads
+        window.onload = fetchCompanies;
     </script>
 </body>
 </html>
