@@ -180,31 +180,35 @@ async function deleteCompany() {
     }
 }
 
-        async function fetchCompanyName() {
-            const companyName = document.getElementById('companyname').value;
-            
-            if (!companyName) {
-                document.getElementById('companyNames').textContent = "Please enter a valid company name";
-                return;
-            }
-        
-            try {
-                const url = `https://yrityshaku.azurewebsites.net/api/companyname?name=${encodeURIComponent(companyName)}`;
-            
-                const response = await fetch(url);
-                const data = await response.json();
-            
-                const companies = data.companies.map(company => {
-                    const businessId = company.businessId.value;
-                    const name = company.names[0]?.name || "Unknown Name";
-                    return `${name}, ${businessId}`;
-                });
-            
-                document.getElementById('companyNames').textContent = companies.join('\n');
-            } catch (error) {
-                document.getElementById('companyNames').textContent = 'Error fetching data.';
-            }
-        }
+async function fetchCompanyName() {
+    const companyName = document.getElementById('companyname').value;
+
+    if (!companyName) {
+        document.getElementById('companyNames').textContent = "Please enter a valid company name";
+        return;
+    }
+
+    try {
+        const url = `https://yrityshaku.azurewebsites.net/api/companyname?name=${encodeURIComponent(companyName)}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        // Filter to include only active companies with "status": "2"
+        const activeCompanies = data.companies.filter(company => company.status === "2");
+
+        const companies = activeCompanies.map(company => {
+            const businessId = company.businessId.value;
+            const name = company.names[0]?.name || "Unknown Name";
+            return `${name}, ${businessId}`;
+        });
+
+        document.getElementById('companyNames').textContent = companies.length
+            ? companies.join('\n')
+            : "No active companies found.";
+    } catch (error) {
+        document.getElementById('companyNames').textContent = 'Error fetching data.';
+    }
+}
 
 
         async function fetchCompanies() {
