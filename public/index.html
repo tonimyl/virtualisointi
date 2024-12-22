@@ -51,31 +51,38 @@
             }
         }
     
-        async function fetchCompanyName() {
-            // Get the businessId from the input field
-            const businessId = document.getElementById('companyname').value;
-
-            // Make sure the businessId is not empty
-            if (!businessId) {
-                document.getElementById('companyNames').textContent = "Please enter a valid company name";
-                return;
-            }
-
-            try {
-                // Construct the URL with the businessId as a query parameter
-                const url = `https://yrityshaku.azurewebsites.net/api/companyname?name=${encodeURIComponent(businessId)}`;
-
-                // Make the fetch request
-                const response = await fetch(url);
-                const data = await response.json();
-
-                // Display the data in the HTML element
-                document.getElementById('companyNames').textContent = JSON.stringify(data, null, 2);
-            } catch (error) {
-                // Handle any errors that occur
-                document.getElementById('companyNames').textContent = 'Error fetching data.';
-            }
+    async function fetchCompanyName() {
+    // Get the company name from the input field
+        const companyName = document.getElementById('companyname').value;
+        
+        // Ensure the company name is not empty
+        if (!companyName) {
+            document.getElementById('companyNames').textContent = "Please enter a valid company name";
+            return;
         }
+    
+        try {
+            // Construct the URL with the company name as a query parameter
+            const url = `https://yrityshaku.azurewebsites.net/api/companyname?name=${encodeURIComponent(companyName)}`;
+        
+            // Make the fetch request
+            const response = await fetch(url);
+            const data = await response.json();
+        
+            // Extract the list of companies
+            const companies = data.companies.map(company => {
+                const businessId = company.businessId.value;
+                const name = company.names[0]?.name || "Unknown Name";
+                return `Company name: ${name}, Business ID: ${businessId}`;
+            });
+        
+            // Join the list with line breaks and display it in the HTML
+            document.getElementById('companyNames').textContent = companies.join('\n');
+        } catch (error) {
+            // Handle any errors that occur
+            document.getElementById('companyNames').textContent = 'Error fetching data.';
+        }
+}
     </script>
 </body>
 </html>

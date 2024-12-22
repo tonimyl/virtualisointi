@@ -1,12 +1,11 @@
 const axios = require('axios');
-const crypto = require('crypto');
 
 module.exports = async function (context, req) {
     try {
         // Get parameters from the request query
         const name = req.query.name || "asiakastieto";
 
-        const apiUrl = `https://avoindata.prh.fi/opendata-ytj-api/v3/companies?businessid=${encodeURIComponent(name)}`;
+        const apiUrl = `https://avoindata.prh.fi/opendata-ytj-api/v3/companies?name=${encodeURIComponent(name)}`;
 
         // Make the GET request to the external API
         const response = await axios.get(apiUrl);
