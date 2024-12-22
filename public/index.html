@@ -116,7 +116,7 @@ Line of Business: ${lineOfBusinessText || "N/A"}
             }
 
             try {
-                const url = 'https://<your-azure-function-url>/api/dboperations'; // Replace with your Azure function URL
+                const url = 'https://yrityshaku.azurewebsites.net/api/dboperations?'; // Replace with your Azure function URL
                 const response = await fetch(url, {
                     method: 'POST',
                     headers: {
