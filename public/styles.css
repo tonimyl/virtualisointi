@@ -65,21 +65,27 @@ section {
     outline: none;
 }
 
-.input-section button {
-    background-color: #007BFF;
-    color: #fff;
+button {
+    background-color: #4CAF50; /* Green background */
+    color: white;
     border: none;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    border-radius: 4px;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px 0;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-    width: auto; /* Ensures the button is not stretched */
-    max-width: 200px; /* Limits the button width */
+    border-radius: 5px;
 }
 
-.input-section button:hover {
-    background-color: #0056b3;
+button:hover {
+    background-color: #45a049; /* Slightly darker green on hover */
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
 }
 
 /* Output Section */
@@ -106,6 +112,26 @@ section {
     overflow: auto;
     color: #333;
     margin: 0; /* Remove any extra margin */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+td {
+    background-color: #fff;
 }
 
 /* Media Queries for Responsiveness */

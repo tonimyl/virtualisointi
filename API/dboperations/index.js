@@ -2,8 +2,8 @@ const sql = require('mssql');
 
 // Your Azure SQL database config
 const config = {
-    user: "XXXXX",        // Database username
-    password: "XXXX",     // Database password
+    user: "sqladmin",        // Database username
+    password: "HK12asd442",     // Database password
     server: "virtualisointisql.database.windows.net",  // Your Azure SQL Server URL
     database: "virtualisointidb",  // Your database name
     options: {

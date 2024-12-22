@@ -39,7 +39,22 @@
         <button id="saveDataButton" onclick="saveData()" disabled>Save</button>
 
         <h2>List of Companies:</h2>
-        <pre id="companyList">Loading...</pre>
+        <table id="companyTable" style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Business ID</th>
+                    <th>Address</th>
+                    <th>Phone</th>
+                    <th>Website</th>
+                    <th>Email</th>
+                    <th>Line of Business</th>
+                </tr>
+            </thead>
+            <tbody id="companyTableBody">
+                <!-- Company rows will be populated here -->
+            </tbody>
+        </table>
     </section>
 
     <script>
@@ -115,31 +130,37 @@ Line of Business: ${lineOfBusinessText || "N/A"}
 
         // Save data to the database
         async function saveData() {
-            if (!fetchedData) {
-                alert("No data to save!");
-                return;
-            }
+    if (!fetchedData) {
+        alert("No data to save!");
+        return;
+    }
 
-            try {
-                const url = 'https://yrityshaku.azurewebsites.net/api/dboperations?'; // Replace with your Azure function URL
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(fetchedData)
-                });
+    try {
+        const url = 'https://yrityshaku.azurewebsites.net/api/dboperations?'; // Replace with your Azure function URL
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(fetchedData)
+        });
 
-                if (response.ok) {
-                    alert("Data saved successfully!");
-                } else {
-                    throw new Error("Error saving data.");
-                }
-            } catch (error) {
-                alert("Failed to save data.");
-                console.error("Error details:", error);
-            }
+        if (response.ok) {
+            alert("Data saved successfully!");
+            // After successful save, you can either reload the page or fetch the companies
+            // Option 1: Reload the page
+            location.reload();
+            
+            // Option 2: Fetch companies again (uncomment the below line to use this option)
+            // fetchCompanies();
+        } else {
+            throw new Error("Error saving data.");
         }
+    } catch (error) {
+        alert("Failed to save data.");
+        console.error("Error details:", error);
+    }
+}
 
         // Fetch companies by name
         async function fetchCompanyName() {
@@ -185,20 +206,29 @@ Line of Business: ${lineOfBusinessText || "N/A"}
 
         // Check if the data is an array (it should be)
         if (Array.isArray(data)) {
-            // Display all companies' information
-            const companyList = data.map(company => {
-                return `
-                    Name: ${company.name || 'N/A'}
-                    Business ID: ${company.businessId || 'N/A'}
-                    Address: ${company.street || 'N/A'}, ${company.zip || 'N/A'}, ${company.town || 'N/A'}
-                    Phone: ${company.phone || 'N/A'}
-                    Website: ${company.website || 'N/A'}
-                    Email: ${company.email || 'N/A'}
-                    Line of Business: ${company.lineOfBusiness || 'N/A'}
-                `;
-            }).join('\n\n');
+            // Get the table body element
+            const tableBody = document.getElementById('companyTableBody');
 
-            document.getElementById('companyList').textContent = companyList;
+            // Clear any existing rows in the table
+            tableBody.innerHTML = '';
+
+            // Populate the table with company data
+            data.forEach(company => {
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+                    <td>${company.name || 'N/A'}</td>
+                    <td>${company.businessId || 'N/A'}</td>
+                    <td>${company.street || 'N/A'}, ${company.zip || 'N/A'}, ${company.town || 'N/A'}</td>
+                    <td>${company.phone || 'N/A'}</td>
+                    <td>${company.website || 'N/A'}</td>
+                    <td>${company.email || 'N/A'}</td>
+                    <td>${company.lineOfBusiness || 'N/A'}</td>
+                `;
+
+                // Append the row to the table body
+                tableBody.appendChild(row);
+            });
         } else {
             throw new Error('The response is not an array. Please check the backend API.');
         }
