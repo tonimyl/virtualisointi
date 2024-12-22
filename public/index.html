@@ -73,16 +73,16 @@
         } = data.companyResponse || {};
 
         const output = `
-            Name: ${name || "N/A"}
-            Business ID: ${fetchedBusinessId || "N/A"}
-            Address: ${street || "N/A"}, ${zip || "N/A"} ${town || "N/A"}
-            Phone: ${phone || "N/A"}
-            Website: ${www || "N/A"}
-            Email: ${email || "N/A"}
-            Line of Business: ${lineOfBusinessText || "N/A"}
-        `;
+        Name: ${name || "N/A"}
+        Business ID: ${businessId || "N/A"}
+        Address: ${street || "N/A"}, ${zip || "N/A"} ${town || "N/A"}
+        Phone: ${phone || "N/A"}
+        Website: ${www || "N/A"}
+        Email: ${email || "N/A"}
+        Line of Business: ${lineOfBusinessText || "N/A"}
+        `.trim();
 
-        document.getElementById('json-data').textContent = output.trim();
+        document.getElementById('json-data').textContent = output;
     } catch (error) {
         document.getElementById('json-data').textContent = 'Error fetching data.';
         console.error("Error details:", error);
