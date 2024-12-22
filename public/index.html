@@ -14,11 +14,7 @@
 
     <section class="input-section">
         <!-- Input for Business ID -->
-        <label for="businessId" class="input-label">Yritystietojen haku y-tunnuksella:</label>
-        <div class="input-row">
-            <input type="text" id="businessId" name="businessId" placeholder="e.g., 1234567-8" />
-            <button onclick="fetchData()">Hae</button>
-        </div>
+
     
         <!-- Input for Company Name -->
         <label for="companyname" class="input-label">Hae yriyksiä nimellä:</label>
@@ -26,17 +22,14 @@
             <input type="text" id="companyname" name="companyname" placeholder="e.g., Example Ltd." />
             <button onclick="fetchCompanyName()">Hae</button>
         </div>
-        <section class="input-section">
-            <label for="deleteBusinessId" class="input-label">Poista y-tunnus luettelosta:</label>
-            <div class="input-row">
-                <input type="text" id="deleteBusinessId" name="deleteBusinessId" placeholder="e.g., 1234567-8" />
-                <button onclick="deleteCompany()">Delete</button>
-            </div>
-        </section>
     </section>
     
     <section class="output-section">
-        <h2>Yrityksen yhteystiedot:</h2>
+        <label for="businessId" class="input-label">Yritystietojen haku y-tunnuksella:</label>
+        <div class="input-row">
+            <input type="text" id="businessId" name="businessId" placeholder="e.g., 1234567-8" />
+            <button onclick="fetchData()">Hae</button>
+        </div>
         <pre id="json-data"></pre>
 
         <!-- Save Button -->
@@ -59,6 +52,11 @@
                 <!-- Company rows will be populated here -->
             </tbody>
         </table>
+            <label for="deleteBusinessId" class="input-label">Poista y-tunnus luettelosta:</label>
+            <div class="input-row">
+                <input type="text" id="deleteBusinessId" name="deleteBusinessId" placeholder="e.g., 1234567-8" />
+                <button onclick="deleteCompany()">Delete</button>
+            </div>
     </section>
 
     <script>
