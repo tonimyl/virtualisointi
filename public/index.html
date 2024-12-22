@@ -14,16 +14,22 @@
 
     <section class="input-section">
         <label for="businessId" class="input-label">Yritystietojen haku y-tunnuksella:</label>
-        <input type="text" id="businessId" name="businessId" placeholder="e.g., 1234567-8" />
-        <button onclick="fetchData()">Hae</button><br>
+        <div class="input-row">
+            <input type="text" id="businessId" name="businessId" placeholder="e.g., 1234567-8" />
+            <button onclick="fetchData()">Hae</button>
+        </div>
+    
         <label for="companyname" class="input-label">Yrityksen Y-tunnushaku nimellä:</label>
-        <input type="text" id="companyname" name="companyname" placeholder="e.g., Example Ltd." />
-        <button onclick="fetchCompanyName()">Hae</button>
+        <div class="input-row">
+            <input type="text" id="companyname" name="companyname" placeholder="e.g., Example Ltd." />
+            <button onclick="fetchCompanyName()">Hae</button>
+        </div>
     </section>
+    
     <section class="output-section">
         <h2>Haetut y-tunnukset:</h2>
         <pre id="companyNames"></pre>
-
+    
         <h2>Haetut yritystiedot:</h2>
         <pre id="json-data"></pre>
     </section>

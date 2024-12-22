@@ -43,11 +43,16 @@ section {
     font-weight: bold;
 }
 
-.input-section input {
-    width: 100%;
-    max-width: 600px; /* Keeps input field from being too wide */
-    padding: 0.8rem;
+.input-section .input-row {
+    display: flex;
+    flex-wrap: wrap;  /* Allows the input fields and buttons to wrap on smaller screens */
+    gap: 10px;  /* Adds space between the input and button */
     margin-bottom: 1rem;
+}
+
+.input-section input {
+    flex-grow: 1;
+    padding: 0.8rem;
     font-size: 1rem;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -64,15 +69,13 @@ section {
     background-color: #007BFF;
     color: #fff;
     border: none;
-    padding: 0.5rem 1rem;  /* Reduced padding to make buttons smaller */
+    padding: 0.5rem 1rem;
     font-size: 1rem;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin-bottom: 1rem;
-    width: auto;  /* Ensures the button doesn't stretch */
+    width: auto; /* Ensures the button is not stretched */
     max-width: 200px; /* Limits the button width */
-    align-self: center;  /* Centers the button */
 }
 
 .input-section button:hover {
@@ -107,10 +110,11 @@ section {
 
 /* Media Queries for Responsiveness */
 @media (max-width: 768px) {
-    .input-section input {
-        width: 90%; /* Makes input fields scale better on small screens */
+    .input-section .input-row {
+        flex-direction: column;  /* Stacks inputs and buttons on small screens */
     }
+    .input-section input,
     .input-section button {
-        width: 90%; /* Ensures buttons are responsive on smaller screens */
+        width: 100%; /* Full width for inputs and buttons */
     }
 }
