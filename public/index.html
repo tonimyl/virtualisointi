@@ -86,10 +86,10 @@ Line of Business: ${lineOfBusinessText || "N/A"}
 }
     
     async function fetchCompanyName() {
-        const companyName = document.getElementById('companyname').value;
+        const companyName = document.getElementById('json-data').value;
         
         if (!companyName) {
-            document.getElementById('companyNames').textContent = "Please enter a valid company name";
+            document.getElementById('json-data').textContent = "Please enter a valid company name";
             return;
         }
     
@@ -105,9 +105,9 @@ Line of Business: ${lineOfBusinessText || "N/A"}
                 return `${name}, ${businessId}`;
             });
         
-            document.getElementById('companyNames').textContent = companies.join('\n');
+            document.getElementById('json-data').textContent = companies.join('\n');
         } catch (error) {
-            document.getElementById('companyNames').textContent = 'Error fetching data.';
+            document.getElementById('json-data').textContent = 'Error fetching data.';
         }
 }
     </script>
