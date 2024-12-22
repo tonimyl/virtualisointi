@@ -12,7 +12,7 @@
     <script>
         async function fetchData() {
             try {
-                const response = await fetch('/api/fetchdata');
+                const response = await fetch('https://yrityshaku.azurewebsites.net/api/fetchdata');
                 const data = await response.json();
                 document.getElementById('json-data').textContent = JSON.stringify(data, null, 2);
             } catch (error) {
