@@ -45,7 +45,7 @@ section {
 
 .input-section input {
     width: 100%;
-    max-width: 600px;
+    max-width: 600px; /* Keeps input field from being too wide */
     padding: 0.8rem;
     margin-bottom: 1rem;
     font-size: 1rem;
@@ -64,12 +64,15 @@ section {
     background-color: #007BFF;
     color: #fff;
     border: none;
-    padding: 0.5rem 1rem; /* Smaller padding */
-    font-size: 0.9rem; /* Smaller font size */
+    padding: 0.5rem 1rem;  /* Reduced padding to make buttons smaller */
+    font-size: 1rem;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin-top: 10px;
+    margin-bottom: 1rem;
+    width: auto;  /* Ensures the button doesn't stretch */
+    max-width: 200px; /* Limits the button width */
+    align-self: center;  /* Centers the button */
 }
 
 .input-section button:hover {
@@ -105,9 +108,9 @@ section {
 /* Media Queries for Responsiveness */
 @media (max-width: 768px) {
     .input-section input {
-        width: 90%;
+        width: 90%; /* Makes input fields scale better on small screens */
     }
     .input-section button {
-        width: 90%;
+        width: 90%; /* Ensures buttons are responsive on smaller screens */
     }
 }
