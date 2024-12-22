@@ -64,7 +64,16 @@ section {
     border-color: #007BFF;
     outline: none;
 }
-
+.scrollable-list {
+    max-height: 200px; /* Set the maximum height */
+    overflow-y: auto; /* Add vertical scrolling when content exceeds max-height */
+    border: 1px solid #ccc; /* Optional: Add a border for better visibility */
+    padding: 8px; /* Add padding inside the container */
+    background-color: #f9f9f9; /* Optional: Light background for readability */
+    font-family: 'Roboto', sans-serif; /* Match the font style */
+    font-size: 14px; /* Optional: Adjust font size for better display */
+    line-height: 1.5; /* Optional: Improve readability with line spacing */
+}
 button {
     background-color: #4CAF50; /* Green background */
     color: white;
