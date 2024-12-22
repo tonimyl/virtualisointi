@@ -34,10 +34,10 @@
     <!-- Output Section -->
     <section class="output-section">
         <h2>Fetched Company IDs:</h2>
-        <pre id="companyNames">Loading...</pre>
+        <pre id="companyNames"></pre>
 
         <h2>Fetched Data:</h2>
-        <pre id="json-data">Loading...</pre>
+        <pre id="json-data"></pre>
     </section>
     <script>
     
@@ -61,7 +61,9 @@
 
         const data = await response.json();
         console.log("Response data:", data);
-
+        const cleanOutput = (text) => {
+            return text.trim().replace(/^ +/gm, ''); // Removes leading spaces for each line
+                };
         const {
             identificationData: {
                 name,
@@ -80,9 +82,9 @@
         Website: ${www || "N/A"}
         Email: ${email || "N/A"}
         Line of Business: ${lineOfBusinessText || "N/A"}
-        `.trim();
+        `;
 
-        document.getElementById('json-data').textContent = output;
+        document.getElementById('json-data').textContent = cleanOutput(output);
     } catch (error) {
         document.getElementById('json-data').textContent = 'Error fetching data.';
         console.error("Error details:", error);

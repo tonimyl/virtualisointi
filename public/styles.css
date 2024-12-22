@@ -95,10 +95,11 @@ section {
     border-radius: 4px;
     font-family: monospace;
     font-size: 0.9rem;
-    white-space: pre-wrap;
+    white-space: pre-line; /* Wrap text without adding extra spaces/indentation */
     word-wrap: break-word;
     overflow: auto;
     color: #333;
+    margin: 0; /* Remove any extra margin */
 }
 
 /* Media Queries for Responsiveness */
