@@ -13,12 +13,14 @@
     </header>
 
     <section class="input-section">
+        <!-- Input for Business ID -->
         <label for="businessId" class="input-label">Yritystietojen haku y-tunnuksella:</label>
         <div class="input-row">
             <input type="text" id="businessId" name="businessId" placeholder="e.g., 1234567-8" />
             <button onclick="fetchData()">Hae</button>
         </div>
     
+        <!-- Input for Company Name -->
         <label for="companyname" class="input-label">Yrityksen Y-tunnushaku nimellä:</label>
         <div class="input-row">
             <input type="text" id="companyname" name="companyname" placeholder="e.g., Example Ltd." />
@@ -86,10 +88,10 @@ Line of Business: ${lineOfBusinessText || "N/A"}
 }
     
     async function fetchCompanyName() {
-        const companyName = document.getElementById('json-data').value;
+        const companyName = document.getElementById('companyname').value;
         
         if (!companyName) {
-            document.getElementById('json-data').textContent = "Please enter a valid company name";
+            document.getElementById('companyNames').textContent = "Please enter a valid company name";
             return;
         }
     
@@ -105,9 +107,9 @@ Line of Business: ${lineOfBusinessText || "N/A"}
                 return `${name}, ${businessId}`;
             });
         
-            document.getElementById('json-data').textContent = companies.join('\n');
+            document.getElementById('companyNames').textContent = companies.join('\n');
         } catch (error) {
-            document.getElementById('json-data').textContent = 'Error fetching data.';
+            document.getElementById('companyNames').textContent = 'Error fetching data.';
         }
 }
     </script>
