@@ -49,17 +49,55 @@ async function getAllCompanies() {
         return { message: 'Error retrieving company data', error: err.message };
     }
 }
+async function deleteCompanyData(businessId) {
+    try {
+        // Create a connection pool
+        let pool = await sql.connect(config);
 
+        // SQL query to delete data from the CompanyData table
+        let query = `
+            DELETE FROM CompanyData WHERE businessId = '${businessId}'
+        `;
+
+        // Execute the query
+        await pool.request().query(query);
+
+        // Return a success message
+        return { message: 'Company data deleted successfully' };
+
+    } catch (err) {
+        console.error(err);
+        return { message: 'Error deleting company data', error: err.message };
+    }
+}
 // Azure Function entry point
 module.exports = async function (context, req) {
     if (req.method === 'POST') {
+        // Insert new data into the database
         const result = await insertCompanyData(req.body);
         context.res = {
             status: 200,  // Success
             body: result
         };
     } else if (req.method === 'GET') {
-        const result = await getAllCompanies();
+        // Retrieve all companies
+        const result = await getAllCompanies();  // Fetch all company data
+        context.res = {
+            status: 200,  // Success
+            body: result
+        };
+    } else if (req.method === 'DELETE') {
+        // Delete company data by businessId
+        const businessId = req.query.businessId;
+        if (!businessId) {
+            context.res = {
+                status: 400,  // Bad Request
+                body: "Business ID is required to delete a company."
+            };
+            return;
+        }
+
+        const result = await deleteCompanyData(businessId);  // Delete company data
         context.res = {
             status: 200,  // Success
             body: result
@@ -67,7 +105,7 @@ module.exports = async function (context, req) {
     } else {
         context.res = {
             status: 405,  // Method Not Allowed
-            body: "Method not allowed. Use GET or POST."
+            body: "Method not allowed. Use GET, POST, or DELETE."
         };
     }
 };

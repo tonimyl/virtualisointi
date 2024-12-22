@@ -21,24 +21,28 @@
         </div>
     
         <!-- Input for Company Name -->
-        <label for="companyname" class="input-label">Yrityksen Y-tunnushaku nimellä:</label>
+        <label for="companyname" class="input-label">Hae yriyksiä nimellä:</label>
         <div class="input-row">
             <input type="text" id="companyname" name="companyname" placeholder="e.g., Example Ltd." />
             <button onclick="fetchCompanyName()">Hae</button>
         </div>
+        <section class="input-section">
+            <label for="deleteBusinessId" class="input-label">Poista y-tunnus luettelosta:</label>
+            <div class="input-row">
+                <input type="text" id="deleteBusinessId" name="deleteBusinessId" placeholder="e.g., 1234567-8" />
+                <button onclick="deleteCompany()">Delete</button>
+            </div>
+        </section>
     </section>
     
     <section class="output-section">
-        <h2>Haetut y-tunnukset:</h2>
-        <pre id="companyNames"></pre>
-    
-        <h2>Haetut yritystiedot:</h2>
+        <h2>Yrityksen yhteystiedot:</h2>
         <pre id="json-data"></pre>
 
         <!-- Save Button -->
-        <button id="saveDataButton" onclick="saveData()" disabled>Save</button>
+        <button id="saveDataButton" onclick="saveData()" disabled>Tallenna</button>
 
-        <h2>List of Companies:</h2>
+        <h2>Tallennetut yritykset:</h2>
         <table id="companyTable" style="width: 100%; border-collapse: collapse;">
             <thead>
                 <tr>
@@ -162,6 +166,32 @@ Line of Business: ${lineOfBusinessText || "N/A"}
     }
 }
 
+async function deleteCompany() {
+    const businessId = document.getElementById('deleteBusinessId').value;
+
+    if (!businessId) {
+        alert("Please enter a valid Business ID.");
+        return;
+    }
+
+    try {
+        const url = `https://yrityshaku.azurewebsites.net/api/dboperations?businessId=${encodeURIComponent(businessId)}`;
+        const response = await fetch(url, {
+            method: 'DELETE'
+        });
+
+        if (response.ok) {
+            alert("Company deleted successfully!");
+            // Optionally, call fetchCompanies() again to refresh the list
+            fetchCompanies();
+        } else {
+            throw new Error(`Error deleting company: ${response.statusText}`);
+        }
+    } catch (error) {
+        alert("Failed to delete company.");
+        console.error("Error details:", error);
+    }
+}
         // Fetch companies by name
         async function fetchCompanyName() {
             const companyName = document.getElementById('companyname').value;
