@@ -8,6 +8,7 @@ module.exports = async function (context, req) {
         const passwd = req.query.passwd || "QyM9V8Dn";
         const apikey = req.query.apikey || "co3wo4b1WLG3qetoIcCo06VSUfWCTYtC55p9brLFf1po2I8D15YWcCSGbn5210Tu";
         const enduser = req.query.enduser || "tonitest";
+        const businessId = req.query.businessId || "01110279";
 
         // Get the current timestamp in the required format (e.g., 2024122208452709+0000000)
         const now = new Date();
@@ -17,17 +18,18 @@ module.exports = async function (context, req) {
         const hours = String(now.getUTCHours()).padStart(2, '0');
         const minutes = String(now.getUTCMinutes()).padStart(2, '0');
         const seconds = String(now.getUTCSeconds()).padStart(2, '0');
-        const milliseconds = String(now.getUTCMilliseconds()).padStart(3, '0');
-        const timestamp = `${year}${month}${day}${hours}${minutes}${seconds}${milliseconds}+0000000`;
+        const milliseconds = String(now.getUTCMilliseconds());
+        let timestamp = `${year}${month}${day}${hours}${minutes}${seconds}${milliseconds}+0000000`;
 
-        // Construct the string to hash for checksum (using "+" directly in the string)
+        // Construct the string to hash for checksum (using "+" directly in the string for hashing)
         const stringToHash = `${userid}&${enduser}&${timestamp}&${apikey}&`;
 
-        // Calculate the checksum using SHA-512
-        const checksum = crypto.createHash('sha512').update(stringToHash).digest('hex');
+        // Calculate the checksum using SHA-512 and convert it to uppercase
+        const checksum = crypto.createHash('sha512').update(stringToHash).digest('hex').toUpperCase();
 
-        // Construct the API URL with query parameters, encoding "+" as "%2b"
-        const apiUrl = `https://demo.asiakastieto.fi/services/company5/REST?businessid=01110279&version=5.01&packet=055&json&userid=${encodeURIComponent(userid)}&passwd=${encodeURIComponent(passwd)}&apikey=${encodeURIComponent(apikey)}&enduser=${encodeURIComponent(enduser)}&checksum=${encodeURIComponent(checksum)}&timestamp=${encodeURIComponent(timestamp.replace('+', '%2b'))}`;
+
+        // Construct the API URL with query parameters, encoding the timestamp properly
+        const apiUrl = `https://demo.asiakastieto.fi/services/company5/REST?businessid=${encodeURIComponent(businessId)}&version=5.01&packet=Q047&format=json&reqmsg=COMPANY&target=VAP1&userid=${encodeURIComponent(userid)}&passwd=${encodeURIComponent(passwd)}&enduser=${encodeURIComponent(enduser)}&checksum=${encodeURIComponent(checksum)}&timestamp=${encodeURIComponent(timestamp)}`;
 
         // Make the GET request to the external API
         const response = await axios.get(apiUrl);
