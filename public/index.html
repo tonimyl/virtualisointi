@@ -34,45 +34,50 @@
     
         <h2>Haetut yritystiedot:</h2>
         <pre id="json-data"></pre>
+
+        <!-- Save Button -->
+        <button id="saveDataButton" onclick="saveData()" disabled>Save</button>
     </section>
+
     <script>
-    
-    async function fetchData() {
-    const businessId = document.getElementById('businessId').value;
+        let fetchedData = null; // Store the fetched data
 
-    if (!businessId) {
-        document.getElementById('json-data').textContent = "Please enter a valid Business ID.";
-        return;
-    }
+        async function fetchData() {
+            const businessId = document.getElementById('businessId').value;
 
-    try {
-        const url = `https://yrityshaku.azurewebsites.net/api/fetchdata?businessId=${encodeURIComponent(businessId)}`;
-        console.log(`Fetching data from: ${url}`);
+            if (!businessId) {
+                document.getElementById('json-data').textContent = "Please enter a valid Business ID.";
+                return;
+            }
 
-        const response = await fetch(url);
+            try {
+                const url = `https://yrityshaku.azurewebsites.net/api/fetchdata?businessId=${encodeURIComponent(businessId)}`;
+                console.log(`Fetching data from: ${url}`);
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
+                const response = await fetch(url);
 
-        const data = await response.json();
-        console.log("Response data:", data);
-        const cleanOutput = (text) => {
-            return text.trim().replace(/^ +/gm, ''); 
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log("Response data:", data);
+                const cleanOutput = (text) => {
+                    return text.trim().replace(/^ +/gm, ''); 
                 };
-        const {
-            identificationData: {
-                name,
-                businessId: fetchedBusinessId, // Renamed to avoid conflict
-                address: { street, zip, town } = {},
-                contactInformation: { phone, www, email } = {},
-                lineOfBusiness: { lineOfBusinessText } = {}
-            } = {}
-        } = data.companyResponse || {};
+                const {
+                    identificationData: {
+                        name,
+                        businessId: fetchedBusinessId, // Renamed to avoid conflict
+                        address: { street, zip, town } = {},
+                        contactInformation: { phone, www, email } = {},
+                        lineOfBusiness: { lineOfBusinessText } = {}
+                    } = {}
+                } = data.companyResponse || {};
 
-        const output = `
+                const output = `
 Name: ${name || "N/A"}
-Business ID: ${businessId || "N/A"}
+Business ID: ${fetchedBusinessId || "N/A"}
 Address: ${street || "N/A"}, ${zip || "N/A"} ${town || "N/A"}
 Phone: ${phone || "N/A"}
 Website: ${www || "N/A"}
@@ -80,38 +85,82 @@ Email: ${email || "N/A"}
 Line of Business: ${lineOfBusinessText || "N/A"}
 `;
 
-        document.getElementById('json-data').textContent = cleanOutput(output);
-    } catch (error) {
-        document.getElementById('json-data').textContent = 'Error fetching data.';
-        console.error("Error details:", error);
-    }
-}
-    
-    async function fetchCompanyName() {
-        const companyName = document.getElementById('companyname').value;
-        
-        if (!companyName) {
-            document.getElementById('companyNames').textContent = "Please enter a valid company name";
-            return;
+                document.getElementById('json-data').textContent = cleanOutput(output);
+
+                // Store the fetched data to be sent later to the database
+                fetchedData = {
+                    name,
+                    businessId: fetchedBusinessId,
+                    street,
+                    zip,
+                    town,
+                    phone,
+                    website: www,
+                    email,
+                    lineOfBusiness: lineOfBusinessText
+                };
+
+                // Enable the Save button now that data is available
+                document.getElementById('saveDataButton').disabled = false;
+
+            } catch (error) {
+                document.getElementById('json-data').textContent = 'Error fetching data.';
+                console.error("Error details:", error);
+            }
         }
-    
-        try {
-            const url = `https://yrityshaku.azurewebsites.net/api/companyname?name=${encodeURIComponent(companyName)}`;
-        
-            const response = await fetch(url);
-            const data = await response.json();
-        
-            const companies = data.companies.map(company => {
-                const businessId = company.businessId.value;
-                const name = company.names[0]?.name || "Unknown Name";
-                return `${name}, ${businessId}`;
-            });
-        
-            document.getElementById('companyNames').textContent = companies.join('\n');
-        } catch (error) {
-            document.getElementById('companyNames').textContent = 'Error fetching data.';
+
+        async function saveData() {
+            if (!fetchedData) {
+                alert("No data to save!");
+                return;
+            }
+
+            try {
+                const url = 'https://<your-azure-function-url>/api/dboperations'; // Replace with your Azure function URL
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(fetchedData)
+                });
+
+                if (response.ok) {
+                    alert("Data saved successfully!");
+                } else {
+                    throw new Error("Error saving data.");
+                }
+            } catch (error) {
+                alert("Failed to save data.");
+                console.error("Error details:", error);
+            }
         }
-}
+
+        async function fetchCompanyName() {
+            const companyName = document.getElementById('companyname').value;
+            
+            if (!companyName) {
+                document.getElementById('companyNames').textContent = "Please enter a valid company name";
+                return;
+            }
+        
+            try {
+                const url = `https://yrityshaku.azurewebsites.net/api/companyname?name=${encodeURIComponent(companyName)}`;
+            
+                const response = await fetch(url);
+                const data = await response.json();
+            
+                const companies = data.companies.map(company => {
+                    const businessId = company.businessId.value;
+                    const name = company.names[0]?.name || "Unknown Name";
+                    return `${name}, ${businessId}`;
+                });
+            
+                document.getElementById('companyNames').textContent = companies.join('\n');
+            } catch (error) {
+                document.getElementById('companyNames').textContent = 'Error fetching data.';
+            }
+        }
     </script>
 </body>
 </html>
